@@ -1,4 +1,4 @@
-# Library Management CLI Tool
+# Relational Database–Driven Library Management System
 
 This project is a command-line interface (CLI) tool for managing a library system. It includes functionality for handling book transactions, generating reports, sending renewal reminders, and interacting with the library's database.
 
