@@ -1,0 +1,21 @@
+--Trigger for renewal notification
+
+CREATE OR REPLACE TRIGGER trg_membership_renewed
+  AFTER UPDATE OF ExpiryDate ON MembershipCard
+  FOR EACH ROW
+  WHEN ( NEW.ExpiryDate <> OLD.ExpiryDate )
+BEGIN
+  INSERT INTO Remainder
+    (RemainderID, MemberId, RemainderDate, RType, RMessage, CopyID)
+  VALUES
+    (
+      remainder_seq.NEXTVAL,
+      :NEW.MemberId,
+      SYSDATE,
+      'MembershipRenewal',
+      'Membership renewed and extended until '
+        || TO_CHAR(:NEW.ExpiryDate,'YYYY-MM-DD'),
+      NULL
+    );
+END;
+/

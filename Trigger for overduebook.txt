@@ -1,0 +1,33 @@
+--Trigger for overdue book
+
+SQL> CREATE SEQUENCE REMAINDER_SEQ START WITH 6 INCREMENT BY 1 NOCACHE;
+
+Sequence created.
+
+SQL> CREATE OR REPLACE TRIGGER trg_notify_overdue
+  2  AFTER UPDATE OF ReturnDate ON Borrowing
+  3  FOR EACH ROW
+  4   WHEN ( NEW.ReturnDate > NEW.DueDate )
+  5  DECLARE
+  6   v_msg  VARCHAR2(200);
+  7  BEGIN
+  8    v_msg := 'Book copy ' || :NEW.CopyID
+  9  || ' returned on ' || TO_CHAR(:NEW.ReturnDate,'YYYY-MM-DD')
+ 10  || ' (due '  || TO_CHAR(:NEW.DueDate,   'YYYY-MM-DD')
+ 11  || '), please pay the overdue fines.';
+ 12   INSERT INTO Remainder
+ 13      (RemainderID,  MemberId, RemainderDate,  RType, RMessage, CopyID)
+ 14   VALUES
+ 15  (
+ 16  REMAINDER_SEQ.NEXTVAL,
+ 17  :NEW.MemberID,
+ 18  SYSDATE,
+ 19  'OverdueReturn',
+ 20  v_msg,
+ 21  :NEW.CopyID
+ 22   );
+ 23  END;
+ 24
+ 25  /
+
+Trigger created.
