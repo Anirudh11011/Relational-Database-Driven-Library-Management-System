@@ -2,8 +2,8 @@
 import cx_Oracle
 
 # only these two lines:
-ORACLE_USER = "axk6351"
-ORACLE_PASS = "pLzCFCmxZ0I2"
+ORACLE_USER = "XXXXXX"
+ORACLE_PASS = "XXXXXX"
 
 def get_conn():
     """
